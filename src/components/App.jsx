@@ -7,12 +7,7 @@ import { ContactList } from './ContactList/ContactList';
 import css from './App.module.css';
 class App extends Component {
   state = {
-    contacts: [
-      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     name: '',
     filter: '',
     number: '',
@@ -22,16 +17,12 @@ class App extends Component {
       this.setState({ contacts: JSON.parse(localStorage.getItem('contacts')) });
     }
   }
-  // shouldComponentUpdate(nextProps) {
-  //   if (nextProps !== this.props) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+
   // componentDidUpdate() {
+  //   console.log('componentDidUpdate');
   //   console.log(this.state.contacts);
   //   console.log(JSON.parse(localStorage.getItem('contacts')));
+
   //   if (
   //     JSON.parse(localStorage.getItem('contacts')).length ===
   //     this.state.contacts.length
@@ -41,6 +32,11 @@ class App extends Component {
   //     });
   //   }
   // }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      this.setState({ contacts: JSON.parse(localStorage.getItem('contacts')) });
+    }
+  }
 
   addContact = event => {
     event.preventDefault();
@@ -58,11 +54,17 @@ class App extends Component {
         number: number.toString(),
       });
       localStorage.setItem('contacts', JSON.stringify(currentlySaved));
+      // this.setState({
+      //   contacts: JSON.parse(localStorage.getItem('contacts')),
+      // });
     } else {
       localStorage.setItem(
         'contacts',
         JSON.stringify([{ id: nanoid(), name, number: number.toString() }])
       );
+      // this.setState({
+      //   contacts: JSON.parse(localStorage.getItem('contacts')),
+      // });
     }
 
     event.target.reset();
