@@ -8,19 +8,41 @@ import css from './App.module.css';
 class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     name: '',
     filter: '',
     number: '',
   };
-  componentDidMount() {}
-  componentDidUpdate(prevProps, prevState, snapshot) {}
+  componentDidMount() {
+    if (JSON.parse(localStorage.getItem('contacts')) !== null) {
+      this.setState({ contacts: JSON.parse(localStorage.getItem('contacts')) });
+    }
+  }
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps !== this.props) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // componentDidUpdate() {
+  //   console.log(this.state.contacts);
+  //   console.log(JSON.parse(localStorage.getItem('contacts')));
+  //   if (
+  //     JSON.parse(localStorage.getItem('contacts')).length ===
+  //     this.state.contacts.length
+  //   ) {
+  //     this.setState({
+  //       contacts: JSON.parse(localStorage.getItem('contacts')),
+  //     });
+  //   }
+  // }
 
-  addContact = async event => {
+  addContact = event => {
     event.preventDefault();
     const { name, number } = this.state;
 
@@ -47,7 +69,6 @@ class App extends Component {
   };
 
   handleChnage = event => {
-    // console.log(event.target.name, event.target.value);
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -64,7 +85,7 @@ class App extends Component {
   };
 
   render() {
-    // console.log(this.state);
+    console.log('render');
     return (
       <div
         style={{
