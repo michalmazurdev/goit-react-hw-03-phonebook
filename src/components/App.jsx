@@ -18,26 +18,6 @@ class App extends Component {
     }
   }
 
-  // componentDidUpdate() {
-  //   console.log('componentDidUpdate');
-  //   console.log(this.state.contacts);
-  //   console.log(JSON.parse(localStorage.getItem('contacts')));
-
-  //   if (
-  //     JSON.parse(localStorage.getItem('contacts')).length ===
-  //     this.state.contacts.length
-  //   ) {
-  //     this.setState({
-  //       contacts: JSON.parse(localStorage.getItem('contacts')),
-  //     });
-  //   }
-  // }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      this.setState({ contacts: JSON.parse(localStorage.getItem('contacts')) });
-    }
-  }
-
   addContact = event => {
     event.preventDefault();
     const { name, number } = this.state;
@@ -54,17 +34,17 @@ class App extends Component {
         number: number.toString(),
       });
       localStorage.setItem('contacts', JSON.stringify(currentlySaved));
-      // this.setState({
-      //   contacts: JSON.parse(localStorage.getItem('contacts')),
-      // });
+      this.setState({
+        contacts: JSON.parse(localStorage.getItem('contacts')),
+      });
     } else {
       localStorage.setItem(
         'contacts',
         JSON.stringify([{ id: nanoid(), name, number: number.toString() }])
       );
-      // this.setState({
-      //   contacts: JSON.parse(localStorage.getItem('contacts')),
-      // });
+      this.setState({
+        contacts: JSON.parse(localStorage.getItem('contacts')),
+      });
     }
 
     event.target.reset();
@@ -82,8 +62,14 @@ class App extends Component {
   };
 
   removeContact = id => {
-    const { contacts } = this.state;
-    this.setState({ contacts: contacts.filter(contact => contact.id !== id) });
+    const currentlySaved = JSON.parse(localStorage.getItem('contacts'));
+    localStorage.setItem(
+      'contacts',
+      JSON.stringify(currentlySaved.filter(contact => contact.id !== id))
+    );
+    this.setState({
+      contacts: JSON.parse(localStorage.getItem('contacts')),
+    });
   };
 
   render() {
