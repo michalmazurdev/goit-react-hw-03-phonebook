@@ -17,29 +17,41 @@ class App extends Component {
     filter: '',
     number: '',
   };
+  componentDidMount() {}
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   addContact = async event => {
     event.preventDefault();
-    const { name, number, contacts } = this.state;
-    const contactNames = contacts.map(contact => contact.name);
-    if (contactNames.includes(name)) {
-      return alert(`${name} is alredy in contacts`);
+    const { name, number } = this.state;
+
+    if (localStorage.getItem('contacts') !== null) {
+      const currentlySaved = JSON.parse(localStorage.getItem('contacts'));
+      const contactNames = currentlySaved.map(contact => contact.name);
+      if (contactNames.includes(name)) {
+        return alert(`${name} is alredy in contacts`);
+      }
+      currentlySaved.push({
+        id: nanoid(),
+        name,
+        number: number.toString(),
+      });
+      localStorage.setItem('contacts', JSON.stringify(currentlySaved));
+    } else {
+      localStorage.setItem(
+        'contacts',
+        JSON.stringify([{ id: nanoid(), name, number: number.toString() }])
+      );
     }
-    await this.setState(prevState => ({
-      contacts: [
-        ...prevState.contacts,
-        { id: nanoid(), name: name, number: number.toString() },
-      ],
-    }));
+
     event.target.reset();
   };
 
   handleChnage = event => {
-    console.log(event.target.name, event.target.value);
+    // console.log(event.target.name, event.target.value);
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  filterArrayByName = event => {
+  filterArrayByName = () => {
     const { contacts, filter } = this.state;
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -52,7 +64,7 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div
         style={{
